@@ -15,8 +15,6 @@ namespace DAL
         DbSet<Comment> Comments { get; set; }
         DbSet<User> Users { get; set; }
 
-        public System.Data.Entity.DbSet<DAL.Tables.Photo> Photos { get; set; }
-
-        public System.Data.Entity.DbSet<DAL.Tables.Album> Albums { get; set; }
+       
     }
 }
