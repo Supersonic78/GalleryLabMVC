@@ -8,26 +8,27 @@ using WebGrease.Css.Extensions;
 
 namespace ImageGallery.Mapping
 {
-    public static class PhotoMapping
+    public static class UserMapping
     {
-        public static PhotoViewModel ToModel(this Photo entity)
+        public static UserViewModel ToModel(this User entity)
         {
-            var model = new PhotoViewModel()
+            var model = new UserViewModel()
             {
                 Id = entity.Id,
-                Name = entity.Name,
-                Url = entity.Url
+                Email = entity.Email,
+                Albums = entity.Albums.ToModel(),
+                Comments = entity.Comments.ToModel(),
+
             };
             return model;
         }
-        public static List<PhotoViewModel> ToModel(this ICollection<Photo> entitys)
+        public static List<UserViewModel> ToModel(this ICollection<User> entitys)
         {
-            var model = new List<PhotoViewModel>();
+            var model = new List<UserViewModel>();
 
             entitys.ForEach(x => model.Add(x.ToModel()));
 
             return model;
         }
-
     }
 }

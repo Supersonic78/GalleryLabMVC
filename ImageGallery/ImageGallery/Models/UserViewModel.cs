@@ -10,7 +10,7 @@ namespace ImageGallery.Models
     {
         public Guid Id { get; set; }
         public string Email { get; set; }
-        public List<Album> Albums { get; set; }
-        public List<Comment> Comments { get; set; }
+        public List<AlbumViewModel> Albums { get; set; }
+        public List<CommentViewModel> Comments { get; set; }
     }
 }
