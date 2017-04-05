@@ -16,7 +16,8 @@ namespace ImageGallery.Mapping
             {
                 Id = entity.Id,
                 Name = entity.Name,
-                Url = entity.Url
+                Url = entity.Url,
+                Comments = entity.Comments.ToModel()
             };
             return model;
         }

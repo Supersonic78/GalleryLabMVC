@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DAL.Tables;
+using System.Data.Entity;
 
 namespace DAL.Repositories
 {
@@ -13,7 +14,7 @@ namespace DAL.Repositories
         {
             using (var ctx = new GalleryContext())
             {
-                return ctx.Photos.ToList();
+                return ctx.Photos.Include(x => x.Comments).ToList();
             }
         } 
     }

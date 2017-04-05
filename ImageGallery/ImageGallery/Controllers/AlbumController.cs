@@ -12,19 +12,24 @@ namespace ImageGallery.Controllers
     public class AlbumController : Controller
     {
         private AlbumRepository AlbumRepository { get; set; }
+        private UserRepository UserRepository { get; set; }
 
         public AlbumController()
         {
             this.AlbumRepository = new AlbumRepository();
+            this.UserRepository = new UserRepository();
         }
         // GET: Album
         public ActionResult Index()
         {
             return View();
         }
+        [Authorize]
         public ActionResult List()
         {
-            var model = AlbumRepository.Get().ToModel();
+            var email = User.Identity.Name;
+            var user = (UserRepository.Get(email)).ToModel();
+            var model = AlbumRepository.Get(user.Id).ToModel();
             return PartialView(model);
         }
 
