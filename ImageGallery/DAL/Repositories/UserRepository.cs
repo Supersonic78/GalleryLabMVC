@@ -11,19 +11,19 @@ namespace DAL.Repositories
 {
    public class UserRepository
     {
-        public List<User> Get()
-        {
-            using (var ctx = new GalleryContext())
-            {
-                return ctx.Users.Include(x => x.Albums).ToList();
-            }
-        }
-        public User Get( string email)
-        {
-            using (var ctx = new GalleryContext())
-            {
-                return ctx.Users.Include(x => x.Albums).FirstOrDefault(x=>x.Email == email);
-            }
-        }
+        //public List<User> Get()
+        //{
+        //    using (var ctx = new GalleryContext())
+        //    {
+        //        return ctx.Users.Include(x => x.Albums).ToList();
+        //    }
+        //}
+        //public User Get( string email)
+        //{
+        //    using (var ctx = new GalleryContext())
+        //    {
+        //        return ctx.Users.Include(x => x.Albums).FirstOrDefault(x=>x.Email == email);
+        //    }
+        //}
     }
 }

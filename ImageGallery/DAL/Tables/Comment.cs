@@ -22,8 +22,6 @@ namespace DAL.Tables
         [ForeignKey(name: "AlbumRefID")]
         public virtual Album Album { get; set; }
 
-        public Guid? UserRefID { get; set; }
-        [ForeignKey(name: "UserRefID")]
-        public virtual User User { get; set; }
+        public string UserEmail { get; set; }
     }
 }

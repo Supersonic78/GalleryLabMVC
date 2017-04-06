@@ -9,6 +9,7 @@ using ImageGallery.Models;
 
 namespace ImageGallery.Controllers
 {
+    [Authorize]
     public class AlbumController : Controller
     {
         private AlbumRepository AlbumRepository { get; set; }
@@ -24,12 +25,12 @@ namespace ImageGallery.Controllers
         {
             return View();
         }
-        [Authorize]
+      
         public ActionResult List()
         {
             var email = User.Identity.Name;
-            var user = (UserRepository.Get(email)).ToModel();
-            var model = AlbumRepository.Get(user.Id).ToModel();
+            
+            var model = AlbumRepository.Get(email).ToModel();
             return PartialView(model);
         }
 
@@ -47,13 +48,21 @@ namespace ImageGallery.Controllers
 
         // POST: Album/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(AlbumViewModel collection)
         {
             try
             {
-                // TODO: Add insert logic here
+                if (ModelState.IsValid)
+                {
+                    collection.UserEmail = User.Identity.Name;
+                    collection.Id = Guid.NewGuid();
 
-                return RedirectToAction("Index");
+                    AlbumRepository.AddOrUpdate(collection.ToEntity());
+
+                    return RedirectToAction("Index");
+                }
+
+                return View(collection);
             }
             catch
             {
@@ -62,20 +71,27 @@ namespace ImageGallery.Controllers
         }
 
         // GET: Album/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(Guid id)
         {
-            return View();
+            var model = AlbumRepository.Get(id).ToModel();
+
+            return View(model);
         }
 
         // POST: Album/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(Guid id, AlbumViewModel collection)
         {
             try
             {
-                // TODO: Add update logic here
+                if (ModelState.IsValid)
+                {                     
+                    AlbumRepository.AddOrUpdate(collection.ToEntity());
 
-                return RedirectToAction("Index");
+                    return RedirectToAction("Index");
+                }
+
+                return View(collection);
             }
             catch
             {

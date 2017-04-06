@@ -10,25 +10,25 @@ namespace ImageGallery.Mapping
 {
     public static class UserMapping
     {
-        public static UserViewModel ToModel(this User entity)
-        {
-            var model = new UserViewModel()
-            {
-                Id = entity.Id,
-                Email = entity.Email,
-                Albums = entity.Albums.ToModel(),
-                Comments = entity.Comments.ToModel(),
+        //public static UserViewModel ToModel(this User entity)
+        //{
+        //    var model = new UserViewModel()
+        //    {
+        //        Id = entity.Id,
+        //        Email = entity.Email,
+        //        Albums = entity.Albums.ToModel(),
+        //        Comments = entity.Comments.ToModel(),
 
-            };
-            return model;
-        }
-        public static List<UserViewModel> ToModel(this ICollection<User> entitys)
-        {
-            var model = new List<UserViewModel>();
+        //    };
+        //    return model;
+        //}
+        //public static List<UserViewModel> ToModel(this ICollection<User> entitys)
+        //{
+        //    var model = new List<UserViewModel>();
 
-            entitys.ForEach(x => model.Add(x.ToModel()));
+        //    entitys.ForEach(x => model.Add(x.ToModel()));
 
-            return model;
-        }
+        //    return model;
+        //}
     }
 }

@@ -60,7 +60,6 @@
     <Compile Include="Tables\Album.cs" />
     <Compile Include="Tables\Comment.cs" />
     <Compile Include="Tables\Photo.cs" />
-    <Compile Include="Tables\User.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

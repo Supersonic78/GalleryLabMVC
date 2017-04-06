@@ -30,5 +30,25 @@ namespace ImageGallery.Mapping
             return model;
         }
 
+        public static Photo ToEntity(this PhotoViewModel model)
+        {
+            var entity = new Photo()
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Url = model.Url,
+                Comments = model.Comments.ToEntity(),
+            };
+            return entity;
+        }
+        public static List<Photo> ToEntity(this ICollection<PhotoViewModel> model)
+        {
+            var entity = new List<Photo>();
+
+            model.ForEach(x => entity.Add(x.ToEntity()));
+
+            return entity;
+        }
+
     }
 }

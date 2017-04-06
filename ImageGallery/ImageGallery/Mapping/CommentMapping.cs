@@ -17,7 +17,7 @@ namespace ImageGallery.Mapping
             {
                 Id = entity.Id,
                 Text = entity.Text,
-              //  User = entity.User.ToModel(),
+                UserEmail = entity.UserEmail
             };
 
             return model;
@@ -26,17 +26,28 @@ namespace ImageGallery.Mapping
         {
             var model = new List<CommentViewModel>();
 
-            // ALternativ 1
             entitys.ForEach(x=> model.Add(x.ToModel()));
-
-            // ALternativ 2
-            //foreach (var comment in entitys)
-            //{
-            //    model.Add(comment.ToModel());
-            //}
-
-
             return model;
+        }
+
+        public static Comment ToEntity(this CommentViewModel model)
+        {
+            var entity = new Comment()
+            {
+                Id = model.Id,
+                Text = model.Text,
+                UserEmail = model.UserEmail
+
+            };
+            return entity;
+        }
+        public static List<Comment> ToEntity(this ICollection<CommentViewModel> model)
+        {
+            var entity = new List<Comment>();
+
+            model.ForEach(x => entity.Add(x.ToEntity()));
+
+            return entity;
         }
     }
 }
