@@ -25,11 +25,11 @@ namespace ImageGallery.Controllers
         {
             return View();
         }
-      
+
         public ActionResult List()
         {
             var email = User.Identity.Name;
-            
+
             var model = AlbumRepository.Get(email).ToModel();
             return PartialView(model);
         }
@@ -85,7 +85,7 @@ namespace ImageGallery.Controllers
             try
             {
                 if (ModelState.IsValid)
-                {                     
+                {
                     AlbumRepository.AddOrUpdate(collection.ToEntity());
 
                     return RedirectToAction("Index");
@@ -100,20 +100,22 @@ namespace ImageGallery.Controllers
         }
 
         // GET: Album/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(Guid id)
         {
             return View();
         }
 
         // POST: Album/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(AlbumViewModel collection)
         {
             try
             {
-                // TODO: Add delete logic here
+               
+                    AlbumRepository.Delete(collection.Id);
 
-                return RedirectToAction("Index");
+                    return RedirectToAction("Index");
+                         
             }
             catch
             {

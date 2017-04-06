@@ -44,5 +44,14 @@ namespace DAL.Repositories
                 ctx.SaveChanges();
             }
         }
+        public void Delete(Guid Id)
+        {
+            using (var ctx = new GalleryContext())
+            {
+                var entityToDelete = ctx.Albums.Find(Id);
+                ctx.Albums.Remove(entityToDelete);
+                ctx.SaveChanges();
+            }
+        }
     }
 }
