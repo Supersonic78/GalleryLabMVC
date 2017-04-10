@@ -1,28 +1,54 @@
 ﻿@model IEnumerable<ImageGallery.Models.AlbumViewModel>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th></th>
-    </tr>
+<div class="row">
+    @foreach (var item in Model)
+    {
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Pictures", "Index","Photo", new { id = item.Id },null) |
-            @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
-       
-            @Html.ActionLink("Delete", "Delete", new {id = item.Id})
-        </td>
-    </tr>
-}
+        var options = new AjaxOptions()
+        {
+            HttpMethod = "POST",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = item.Id.ToString(),
+        };
+        var commentId = item.Id + "comment";
 
-</table>
+        var optionsComments = new AjaxOptions()
+        {
+            HttpMethod = "POST",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = commentId,
+        };
+
+        <div class="col-sm-6 col-md-4" id="@item.Id">
+            <div class="thumbnail">
+                <img class="img-responsive" src="../../img/Cool.JPG" alt="Img here">
+                <div class="caption">
+                    <h3>@Html.DisplayFor(modelItem => item.Name)</h3>
+                    <p>All Comments</p>
+                    <div id="@commentId">
+                        @{
+                            Html.RenderAction("Comment", new { id = item.Id });
+                        }
+                    </div>
+                    <label>
+                        add New Comment:
+                        @using (Ajax.BeginForm("CreateComment", "Album", new {id = item.Id}, optionsComments, null))
+                        {
+                            <input name="comment" type="text"/>
+                            <input type="submit" value="Add"/>
+                        }
+                    </label>
+                    <div class="btn-group btn-group-justified" role="group" aria-label="">
+
+                        @Html.ActionLink("Pictures", "Index", "Photo", new { id = item.Id }, new { @class = "btn btn-default" })
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })
+                        @Ajax.ActionLink("Delete", "Delete", new { id = item.Id }, options, new { @class = "btn btn-default" })
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    }
+</div>

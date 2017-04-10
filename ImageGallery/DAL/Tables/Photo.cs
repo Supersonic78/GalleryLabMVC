@@ -12,7 +12,7 @@ namespace DAL.Tables
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
+        public ICollection<Comment> Comments { get; set; }
 
         // ForeignKeys
 

@@ -8,7 +8,7 @@ using System.Data.Entity;
 
 namespace DAL.Repositories
 {
-    class PhotoRepository
+   public class PhotoRepository
     {
         public List<Photo> Get()
         {
@@ -16,6 +16,24 @@ namespace DAL.Repositories
             {
                 return ctx.Photos.Include(x => x.Comments).ToList();
             }
-        } 
+        }
+
+       public void Clear()
+       {
+           using (var ctx = new GalleryContext())
+           {
+               var photos = ctx.Photos;
+               ctx.Photos.RemoveRange(photos);
+           }
+       }
+
+        public ICollection<Photo> Get(Guid id)
+        {
+            using (var ctx = new GalleryContext())
+            {
+                return ctx.Photos.Where(x => x.AlbumRefID == id).ToList();
+               
+            }
+        }
     }
 }

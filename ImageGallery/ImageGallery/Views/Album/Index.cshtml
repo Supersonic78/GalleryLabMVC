@@ -4,8 +4,19 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
+<h2>Albums</h2>
 @{
-    Html.RenderAction("List");
+    var options = new AjaxOptions()
+    {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "AlbumListDiv",
+    };
 }
+@Html.Partial("Create")
+
+<div id="AlbumListDiv">
+    @{
+        Html.RenderAction("List");
+    }
+</div>

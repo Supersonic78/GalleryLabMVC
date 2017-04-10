@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DAL.Repositories;
+using DAL.Tables;
 using ImageGallery.Mapping;
 using ImageGallery.Models;
 
@@ -14,15 +15,20 @@ namespace ImageGallery.Controllers
     {
         private AlbumRepository AlbumRepository { get; set; }
         private UserRepository UserRepository { get; set; }
+        private CommentRepository CommentRepository { get; set; }
 
         public AlbumController()
         {
             this.AlbumRepository = new AlbumRepository();
             this.UserRepository = new UserRepository();
+            this.CommentRepository = new CommentRepository();
         }
         // GET: Album
         public ActionResult Index()
         {
+            //var pr = new PhotoRepository();
+            //pr.Clear();
+            //AlbumRepository.Clear();
             return View();
         }
 
@@ -31,45 +37,59 @@ namespace ImageGallery.Controllers
             var email = User.Identity.Name;
 
             var model = AlbumRepository.Get(email).ToModel();
-            return PartialView(model);
+            return PartialView("List", model);
         }
 
-        // GET: Album/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+
 
         // GET: Album/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
 
         // POST: Album/Create
+        public ActionResult Create()
+        {
+            return PartialView();
+        }
         [HttpPost]
         public ActionResult Create(AlbumViewModel collection)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    collection.UserEmail = User.Identity.Name;
-                    collection.Id = Guid.NewGuid();
+                collection.UserEmail = User.Identity.Name;
+                collection.Id = Guid.NewGuid();
 
-                    AlbumRepository.AddOrUpdate(collection.ToEntity());
-
-                    return RedirectToAction("Index");
-                }
-
-                return View(collection);
+                AlbumRepository.AddOrUpdate(collection.ToEntity());
             }
-            catch
-            {
-                return View();
-            }
+
+            return List();
         }
 
+        public ActionResult Comment(Guid id)
+        {
+            var comments = CommentRepository.Get(id).ToModel();
+
+            return PartialView(comments);
+        }
+        [HttpPost]
+        public ActionResult CreateComment(string comment, Guid id)
+        {
+            var model = new CommentViewModel()
+            {
+                Id = Guid.NewGuid(),
+                UserEmail = User.Identity.Name,
+                Text = comment,
+                AlbumRefId =id,
+            };
+            CommentRepository.AddOrUppdate(model.ToEntity());
+
+            return Comment(id);
+        }
+
+        public ActionResult DeleteComment(Guid id)
+        {
+            CommentRepository.Delete(id);
+
+            return null;
+        }
         // GET: Album/Edit/5
         public ActionResult Edit(Guid id)
         {
@@ -102,25 +122,13 @@ namespace ImageGallery.Controllers
         // GET: Album/Delete/5
         public ActionResult Delete(Guid id)
         {
-            return View();
+            AlbumRepository.Delete(id);
+
+            return null;
         }
 
         // POST: Album/Delete/5
-        [HttpPost]
-        public ActionResult Delete(AlbumViewModel collection)
-        {
-            try
-            {
-               
-                    AlbumRepository.Delete(collection.Id);
 
-                    return RedirectToAction("Index");
-                         
-            }
-            catch
-            {
-                return View();
-            }
-        }
+
     }
 }

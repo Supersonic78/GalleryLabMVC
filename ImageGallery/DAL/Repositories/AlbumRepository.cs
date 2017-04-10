@@ -27,6 +27,15 @@ namespace DAL.Repositories
             }
         }
 
+        public void Clear()
+        {
+            using (var ctx = new GalleryContext())
+            {
+                var albums = ctx.Albums;
+                ctx.Albums.RemoveRange(albums);
+            }
+        }
+
         public void AddOrUpdate(Album album)
         {
             using (var ctx = new GalleryContext())
@@ -49,6 +58,20 @@ namespace DAL.Repositories
             using (var ctx = new GalleryContext())
             {
                 var entityToDelete = ctx.Albums.Find(Id);
+
+            
+                var commetnsToDelete = ctx.Comments.Where(x => x.AlbumRefID == Id ).ToList();
+               
+                var picturesToDelete = ctx.Photos.Where(x => x.AlbumRefID == Id);
+                foreach (var picture in picturesToDelete)
+                {
+                    var deleteMe = ctx.Comments.Where(x => x.PhotoRefID == picture.Id);
+                    commetnsToDelete.AddRange(deleteMe);
+                }
+
+                ctx.Comments.RemoveRange(commetnsToDelete);
+                ctx.Photos.RemoveRange(picturesToDelete);
+
                 ctx.Albums.Remove(entityToDelete);
                 ctx.SaveChanges();
             }

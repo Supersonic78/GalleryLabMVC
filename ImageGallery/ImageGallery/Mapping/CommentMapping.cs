@@ -36,7 +36,10 @@ namespace ImageGallery.Mapping
             {
                 Id = model.Id,
                 Text = model.Text,
-                UserEmail = model.UserEmail
+                UserEmail = model.UserEmail,
+                AlbumRefID = model.AlbumRefId,
+                PhotoRefID =model.PhotoRefId,
+                
 
             };
             return entity;

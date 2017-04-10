@@ -9,8 +9,8 @@ namespace DAL.Tables
 {
     public class Album
     {
-        public virtual ICollection <Photo> Photos { get; set; }
-        public virtual ICollection <Comment> Comments { get; set; }
+        public  ICollection <Photo> Photos { get; set; }
+        public  ICollection <Comment> Comments { get; set; }
         public Guid Id { get; set; }
         public string Name { get; set;}
         public string UserEmail { get; set; }

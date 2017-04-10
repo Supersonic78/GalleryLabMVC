@@ -7,19 +7,21 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using DAL;
+using DAL.Repositories;
 using DAL.Tables;
+using ImageGallery.Mapping;
 
 namespace ImageGallery.Controllers
 {
     public class PhotoController : Controller
     {
-        private GalleryContext db = new GalleryContext();
+       private PhotoRepository PhotoRepository { get; set; }
 
         // GET: Photo
-        public ActionResult Index()
+        public ActionResult Index(Guid id)
         {
-            var photos = db.Photos.Include(p => p.Album);
-            return View(photos.ToList());
+            var photos = PhotoRepository.Get(id).ToModel();
+            return View(photos);
         }
 
         // GET: Photo/Details/5

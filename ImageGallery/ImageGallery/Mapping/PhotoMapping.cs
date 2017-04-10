@@ -19,6 +19,7 @@ namespace ImageGallery.Mapping
                 Url = entity.Url,
                 Comments = entity.Comments.ToModel()
             };
+           
             return model;
         }
         public static List<PhotoViewModel> ToModel(this ICollection<Photo> entitys)
