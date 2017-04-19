@@ -17,6 +17,7 @@ namespace ImageGallery.Mapping
                 Id = entity.Id,
                 Name = entity.Name,
                 Url = entity.Url,
+                AlbumRefId = entity.AlbumRefID ?? Guid.Empty,
                 Comments = entity.Comments.ToModel()
             };
            
@@ -38,6 +39,7 @@ namespace ImageGallery.Mapping
                 Id = model.Id,
                 Name = model.Name,
                 Url = model.Url,
+                AlbumRefID = model.AlbumRefId,
                 Comments = model.Comments.ToEntity(),
             };
             return entity;

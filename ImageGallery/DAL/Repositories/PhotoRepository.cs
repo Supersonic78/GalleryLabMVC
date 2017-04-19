@@ -39,7 +39,26 @@ namespace DAL.Repositories
 
         public void Add(Photo photo)
         {
-            throw new NotImplementedException();
+            using (var ctx = new GalleryContext())
+            {
+                ctx.Photos.Add(photo);
+                ctx.SaveChanges();
+
+            }
+        }
+
+        public void Delete(Guid id)
+        {
+            using (var ctx = new GalleryContext())
+            {
+                var itemToDelete = ctx.Photos.FirstOrDefault(x => x.Id == id);
+                var commetnsToDelete = ctx.Comments.Where(x => x.PhotoRefID == id);
+
+
+                ctx.Comments.RemoveRange(commetnsToDelete);
+                ctx.Photos.Remove(itemToDelete);
+                ctx.SaveChanges();
+            }
         }
     }
 }

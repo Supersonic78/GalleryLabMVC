@@ -18,10 +18,12 @@ namespace ImageGallery.Controllers
     public class PhotoController : Controller
     {
        private PhotoRepository PhotoRepository { get; set; }
+        private CommentRepository CommentRepository { get; set; }
 
         public PhotoController()
         {
             PhotoRepository = new PhotoRepository();
+            CommentRepository = new CommentRepository();
         }
         // GET: Photo
         public ActionResult Index(Guid id)
@@ -35,7 +37,7 @@ namespace ImageGallery.Controllers
         public ActionResult List(Guid id) // Album Id
         {
             var photos = PhotoRepository.Get(id);
-            return View(photos.ToModel());
+            return PartialView("List",photos.ToModel());
         }
 
 
@@ -53,6 +55,7 @@ namespace ImageGallery.Controllers
             {
                 if (file != null || file.ContentLength != 0)
                 {
+                    model.Id = Guid.NewGuid();
                     model.Url = @"/img/" + file.FileName;
                     model.AlbumRefId = id;
                     PhotoRepository.Add(model.ToEntity());
@@ -63,39 +66,37 @@ namespace ImageGallery.Controllers
         
             return List(id);
         }
+        public ActionResult Comment(Guid id)
+        {
+            var comments = CommentRepository.Get(id).ToModel();
 
-        // GET: Photo/Edit/5
-        //public ActionResult Edit(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Photo photo = db.Photos.Find(id);
-        //    if (photo == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    ViewBag.AlbumRefID = new SelectList(db.Albums, "Id", "Name", photo.AlbumRefID);
-        //    return View(photo);
-        //}
+            return PartialView("Comment", comments);
+        }
+        public ActionResult DeleteComment(Guid id)
+        {
+            CommentRepository.Delete(id);
 
-        // POST: Photo/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "Id,Name,Url,AlbumRefID")] Photo photo)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(photo).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    ViewBag.AlbumRefID = new SelectList(db.Albums, "Id", "Name", photo.AlbumRefID);
-        //    return View(photo);
-        //}
+            return null;
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateComment(string comment, Guid PictureRefId)
+        {
+            var model = new CommentViewModel();
+            model.UserEmail = User.Identity.Name;
+            model.PhotoRefId = PictureRefId;
+            model.Id = Guid.NewGuid();
+            model.Text = comment;
+            CommentRepository.AddOrUppdate(model.ToEntity());
+
+            return Comment(PictureRefId);
+        }
+        public ActionResult Delete(Guid id)
+        {
+            PhotoRepository.Delete(id);
+
+            return null;
+        }
 
     }
 }

@@ -22,7 +22,9 @@ namespace DAL.Repositories
         {
          using(var ctx = new GalleryContext())
          {
-             return ctx.Comments.Where(x => x.AlbumRefID == id).ToList();
+                var result = ctx.Comments.Where(x => x.AlbumRefID == id).ToList();
+                result = result.Count>0? result: ctx.Comments.Where(x => x.PhotoRefID == id).ToList();
+                return result;
          }
         }
 

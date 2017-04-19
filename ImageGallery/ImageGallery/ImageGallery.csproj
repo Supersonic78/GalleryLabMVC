@@ -246,6 +246,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\MyScripts\Album.js" />
+    <Content Include="Scripts\MyScripts\Comment.js" />
+    <Content Include="Scripts\MyScripts\Photo.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
@@ -286,7 +288,6 @@
     <Content Include="Views\Photo\Create.cshtml" />
     <Content Include="Views\Photo\Delete.cshtml" />
     <Content Include="Views\Photo\Details.cshtml" />
-    <Content Include="Views\Photo\Edit.cshtml" />
     <Content Include="Views\Photo\Index.cshtml" />
     <Content Include="Views\Album\Index.cshtml" />
     <Content Include="Views\Album\List.cshtml" />
@@ -296,6 +297,8 @@
     <Content Include="Views\Album\View.cshtml" />
     <Content Include="Views\Album\Comment.cshtml" />
     <Content Include="Views\Photo\List.cshtml" />
+    <Content Include="Views\Album\CreateComment.cshtml" />
+    <Content Include="Views\Photo\Comment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

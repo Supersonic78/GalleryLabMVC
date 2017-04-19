@@ -67,21 +67,21 @@ namespace ImageGallery.Controllers
         {
             var comments = CommentRepository.Get(id).ToModel();
 
-            return PartialView(comments);
+            return PartialView("Comment",comments);
         }
+     
         [HttpPost]
-        public ActionResult CreateComment(string comment, Guid id)
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateComment(string comment , Guid AlbumRefId)
         {
-            var model = new CommentViewModel()
-            {
-                Id = Guid.NewGuid(),
-                UserEmail = User.Identity.Name,
-                Text = comment,
-                AlbumRefId =id,
-            };
+            var model = new CommentViewModel();
+            model.UserEmail = User.Identity.Name;
+            model.AlbumRefId = AlbumRefId;
+            model.Id = Guid.NewGuid();
+            model.Text = comment;
             CommentRepository.AddOrUppdate(model.ToEntity());
 
-            return Comment(id);
+            return Comment(AlbumRefId);
         }
 
         public ActionResult DeleteComment(Guid id)
