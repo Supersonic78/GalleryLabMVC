@@ -31,9 +31,15 @@ namespace DAL.Repositories
         {
             using (var ctx = new GalleryContext())
             {
-                return ctx.Photos.Where(x => x.AlbumRefID == id).ToList();
-               
+            
+               var  photos =(ctx.Photos.Where(x => x.AlbumRefID == id).ToList()) ?? new List<Photo>();
+                return photos;
             }
+        }
+
+        public void Add(Photo photo)
+        {
+            throw new NotImplementedException();
         }
     }
 }

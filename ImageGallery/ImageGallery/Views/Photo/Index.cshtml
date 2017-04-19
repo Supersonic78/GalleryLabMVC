@@ -1,4 +1,16 @@
-﻿@model IEnumerable<ImageGallery.Models.PhotoViewModel>
+﻿
 
+<h2>Pictures</h2>
+
+
+@{
+    Html.RenderAction("Create", new { id = ViewBag.AlbumRefId });
+}
+<hr />
+<div id="PhotoContainer">
+    @{
+        Html.RenderAction("List", new { id = ViewBag.AlbumRefId });
+    }
+</div>
 
 

@@ -1,0 +1,14 @@
+﻿@model ICollection<ImageGallery.Models.PhotoViewModel>
+
+
+
+@foreach (var item in Model)
+{
+    <div class="row">
+        <div class="col-xs-6 col-md-3">
+            <a href="#" class="thumbnail">
+                <img src="@item.Url" alt="Delete me!">
+            </a>
+        </div>
+    </div>
+}

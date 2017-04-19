@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -10,6 +11,7 @@ using DAL;
 using DAL.Repositories;
 using DAL.Tables;
 using ImageGallery.Mapping;
+using ImageGallery.Models;
 
 namespace ImageGallery.Controllers
 {
@@ -17,120 +19,83 @@ namespace ImageGallery.Controllers
     {
        private PhotoRepository PhotoRepository { get; set; }
 
+        public PhotoController()
+        {
+            PhotoRepository = new PhotoRepository();
+        }
         // GET: Photo
         public ActionResult Index(Guid id)
         {
-            var photos = PhotoRepository.Get(id).ToModel();
-            return View(photos);
-        }
+            ViewBag.AlbumRefId = id;
 
-        // GET: Photo/Details/5
-        public ActionResult Details(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Photo photo = db.Photos.Find(id);
-            if (photo == null)
-            {
-                return HttpNotFound();
-            }
-            return View(photo);
-        }
-
-        // GET: Photo/Create
-        public ActionResult Create()
-        {
-            ViewBag.AlbumRefID = new SelectList(db.Albums, "Id", "Name");
             return View();
         }
 
-        // POST: Photo/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // GET: Photo/Details/5
+        public ActionResult List(Guid id) // Album Id
+        {
+            var photos = PhotoRepository.Get(id);
+            return View(photos.ToModel());
+        }
+
+
+
+        public ActionResult Create(Guid id) // Album id
+        {
+            ViewBag.AlbumRefId = id;
+            return PartialView();
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Url,AlbumRefID")] Photo photo)
+        public ActionResult Create(PhotoViewModel model,HttpPostedFileBase file,Guid id)
         {
             if (ModelState.IsValid)
             {
-                photo.Id = Guid.NewGuid();
-                db.Photos.Add(photo);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (file != null || file.ContentLength != 0)
+                {
+                    model.Url = @"/img/" + file.FileName;
+                    model.AlbumRefId = id;
+                    PhotoRepository.Add(model.ToEntity());
+                   
+                    file.SaveAs(Path.Combine(Server.MapPath("~/img"), file.FileName));
+                }
             }
-
-            ViewBag.AlbumRefID = new SelectList(db.Albums, "Id", "Name", photo.AlbumRefID);
-            return View(photo);
+        
+            return List(id);
         }
 
         // GET: Photo/Edit/5
-        public ActionResult Edit(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Photo photo = db.Photos.Find(id);
-            if (photo == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.AlbumRefID = new SelectList(db.Albums, "Id", "Name", photo.AlbumRefID);
-            return View(photo);
-        }
+        //public ActionResult Edit(Guid? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Photo photo = db.Photos.Find(id);
+        //    if (photo == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    ViewBag.AlbumRefID = new SelectList(db.Albums, "Id", "Name", photo.AlbumRefID);
+        //    return View(photo);
+        //}
 
         // POST: Photo/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Url,AlbumRefID")] Photo photo)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(photo).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.AlbumRefID = new SelectList(db.Albums, "Id", "Name", photo.AlbumRefID);
-            return View(photo);
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit([Bind(Include = "Id,Name,Url,AlbumRefID")] Photo photo)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Entry(photo).State = EntityState.Modified;
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+        //    ViewBag.AlbumRefID = new SelectList(db.Albums, "Id", "Name", photo.AlbumRefID);
+        //    return View(photo);
+        //}
 
-        // GET: Photo/Delete/5
-        public ActionResult Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Photo photo = db.Photos.Find(id);
-            if (photo == null)
-            {
-                return HttpNotFound();
-            }
-            return View(photo);
-        }
-
-        // POST: Photo/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(Guid id)
-        {
-            Photo photo = db.Photos.Find(id);
-            db.Photos.Remove(photo);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

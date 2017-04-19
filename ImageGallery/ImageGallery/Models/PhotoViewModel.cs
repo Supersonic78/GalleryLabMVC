@@ -11,5 +11,8 @@ namespace ImageGallery.Models
         public string Name { get; set; }
         public string Url { get; set; }
         public List<CommentViewModel> Comments { get; set; }
+
+        public AlbumViewModel Album { get; set; }
+        public Guid AlbumRefId { get; set; }
     }
 }

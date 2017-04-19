@@ -295,6 +295,7 @@
     <Content Include="Views\Album\Delete.cshtml" />
     <Content Include="Views\Album\View.cshtml" />
     <Content Include="Views\Album\Comment.cshtml" />
+    <Content Include="Views\Photo\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
