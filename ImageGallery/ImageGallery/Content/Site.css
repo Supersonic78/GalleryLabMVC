@@ -31,12 +31,15 @@ textarea {
 /* The element to apply the animation to */
 .spinner {
    
-    top: 20%;
+    top: 50%;
     left: 30%;
     color: red;
     animation-name: example;
     animation-duration: 0.5s;
     animation-iteration-count: infinite;
     animation-direction: alternate;
+    font-size: 100px; 
+    position: absolute; 
+    word-wrap: break-word;
 }
 
