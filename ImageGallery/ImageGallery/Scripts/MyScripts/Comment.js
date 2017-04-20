@@ -1,7 +1,7 @@
 ﻿
 
 $(document).ready(function (e) {
-    setInterval(loadComments, 2000);
+    setInterval(loadComments, 10000);
 });
 
 

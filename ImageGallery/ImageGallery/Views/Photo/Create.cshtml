@@ -37,12 +37,12 @@
   
 }
 <script type="text/javascript">
-    
 
-    $(document).ready(function () {
+
+    $(document).ready(function() {
         var pictureForms = $(".PictureForm");
 
-        pictureForms.submit(function (e) {
+        pictureForms.submit(function(e) {
             var form = $(this);
             e.preventDefault();
             $.ajax({
@@ -50,20 +50,35 @@
                 url: form.attr('action'),
                 data: new FormData(form[0]),
                 dataType: "html",
-                beforeSend: function () {
-            
+                beforeSend: function() {
+                    showSpinner();
 
                 },
-                success: function (data) {
-     
+                success: function(data) {
+
                     form[0].reset();
                     $("#PhotoContainer").html(data);
+                },
+                complete: function () {
+                    setTimeout(hideSpinner, 4000);
+                        
                 },
                 processData: false,
                 contentType: false
             });
         });
-    })
+    });
 
-
+    function showSpinner() {
+     
+        $('*').css("cursor", "progress");
+        $("input:submit").prop('disabled', true);
+        $(".spinner").css("top", "10%").removeClass("hidden");
+    }
+    function hideSpinner() {
+        $('*').css("cursor", "default");
+        $("input:submit").prop('disabled', false);
+        $(".spinner").css("top","-10%").addClass("hidden");
+     
+    }
 </script>
